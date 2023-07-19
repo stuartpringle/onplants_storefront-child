@@ -54,6 +54,15 @@
 
 
     jQuery(document).ready(function() {
+        const ajaxurl = "<?php echo admin_url('admin-ajax.php'); ?>";
+        jQuery(document.body).on( 'updated_cart_totals', function() {
+            update_cart_item_count_with_ajax_call();
+        });
+
+        jQuery(document.body).on( 'added_to_cart', function() {
+            update_cart_item_count_with_ajax_call();
+        });
+
         jQuery('#order_comments').on('input', function() {
             if(jQuery('#additional-info-message').length < 1) {
                 jQuery('.woocommerce-additional-fields__field-wrapper').prepend('<p id="additional-info-message"><b><?php echo get_option('order_notes_message'); ?></b></p>');
@@ -77,6 +86,18 @@
             }
         });
     });
+
+    function update_cart_item_count_with_ajax_call() {
+        var data = {
+            'action': 'get_number_of_cart_items',
+        };
+        jQuery.post(ajaxurl, data, function(response) {
+            if(jQuery.isNumeric(response)) {
+                document.getElementById('header-cart-count').innerHTML = response;
+            }
+        });
+        
+    }
 </script>
 
 
@@ -145,10 +166,11 @@ if(in_array(get_the_ID(), array(37))) {
     ?>
     <script type="text/javascript">
         function checkout_page_pickup_only_clicked(called_on_page_load = false) {
-            var checkbox = document.getElementById('pick_up').checked;
+            let checkbox = document.getElementById('pick_up').checked;
+            const ajaxurl = "<?php echo admin_url('admin-ajax.php'); ?>";
 
             if(!called_on_page_load) {
-                var data = {
+                let data = {
                     'action': 'set_session_pick_up_button',
                     'checkbox_status': checkbox,
                 };
