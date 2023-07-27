@@ -1219,7 +1219,11 @@ function onp_start_session() {
 	if (session_status() == PHP_SESSION_DISABLED) {
 		return;
 	} elseif(session_status() == PHP_SESSION_NONE) {
-		session_start();
+		if ( !session_id() ) {
+		    session_start( [
+		        'read_and_close' => true,
+		    ] );
+		}
 	}
 }
 
