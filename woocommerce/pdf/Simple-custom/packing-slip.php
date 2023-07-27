@@ -238,7 +238,7 @@ if( sizeof( $items ) > 0 ) : foreach( $product_hierarchy as $category_name => $t
 		}
 
 		$product_is_tote_bag = false;
-		if($product->ID == 140951) {
+		if($product->get_id() == 140951) {
 			$product_is_tote_bag = true;
 		}
 

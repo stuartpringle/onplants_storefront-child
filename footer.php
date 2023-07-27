@@ -111,7 +111,7 @@ $store_page_ids = array(
     '2801'
 );
 
-if(in_array(get_the_ID(), $store_page_ids) || $term->name != '') {
+if(in_array(get_the_ID(), $store_page_ids) || @$term->name != '') {
 $effect = 'blur(1px) brightness(1) contrast(0.8) grayscale(0.3) hue-rotate(0deg) invert(0) opacity(0.5) saturate(100%) sepia(0)';
 $filters = array(
     '-webkit-filter',
