@@ -738,7 +738,7 @@ class onp_order_status {
 	public function get_order_status_by_id($id) {
 		global $wpdb;
 		$query = 'SELECT order_status FROM ' . $this->table_name . ' WHERE id="' . $id . '" LIMIT 1';
-		return $wpdb->get_results($query)[0]->order_status;
+		return @$wpdb->get_results($query)[0]->order_status;
 	}
 
 	public function remove_order_status() {
