@@ -745,7 +745,7 @@ function onp_set_woocommerce_shipping_var() {
 	//function to return the correct shipping method based on cart contents and whether pickup is selected or not.
 	onp_start_session();
 	if(isset($_POST['checkbox_status'])) {
-		$_SESSION['will_pickup_order'] = $_POST['checkbox_status'];
+		@$_SESSION['will_pickup_order'] = $_POST['checkbox_status'];
 	}
 
 	//default case
@@ -756,7 +756,7 @@ function onp_set_woocommerce_shipping_var() {
 	}
 
 	//force local pickup
-	if($_SESSION['will_pickup_order'] == 'true') {
+	if(@$_SESSION['will_pickup_order'] == 'true') {
 		$shipping_method = 'local_pickup:4';
 	}
 
