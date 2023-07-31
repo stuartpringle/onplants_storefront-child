@@ -42,7 +42,7 @@ function display_orders() {
 	wp_enqueue_style('woocommerce_admin_styles-css', '/wp-content/plugins/woocommerce/assets/css/admin.css?ver=4.9.0');
 
 	$filters = get_current_filters();
-	$url = add_query_arg(array('pn' => $_GET['pn']));
+	$url = add_query_arg(array('pn' => isset($_GET['pn'] ? $_GET['pn'] : '')));
 
 
 	//for pagination
