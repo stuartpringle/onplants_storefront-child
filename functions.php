@@ -61,7 +61,7 @@ add_action('pre_get_posts', function ($query){
         }
     }
 
-    if(isset($_POST['onp-out-of-stock-submitted']) && $_POST['onp-out-of-stock-submitted'] == 1) {
+    if(isset($_POST['onp-out-of-stock-submitted']) && @$_POST['onp-out-of-stock-submitted'] == 1) {
     	$_SESSION['hide-out-of-stock'] = (@$_POST['hide-out-of-stock'] == 1);
     }
 
@@ -409,7 +409,7 @@ function onp_cart_message() {
 
 	if($pick_up_only_obj->pickup_season_is_active()) {
 		if(isset($_SESSION['will_pickup_order'])) {
-			$will_pickup_order = $_SESSION['will_pickup_order'];
+			$will_pickup_order = @$_SESSION['will_pickup_order'];
 		}
 
 		$checkbox_disabled_text = '';
@@ -417,8 +417,8 @@ function onp_cart_message() {
 		if($total_quantity_in_cart < $pick_up_only_obj->pick_up_only_number && !$no_pickup_min_products) {
 			//turn off checkbox - this is disabled currently!
 			//$will_pickup_order = false;
-			//$_SESSION['will_pickup_order'] = false;
-			if($_SESSION['will_pickup_order'] == 'false') {
+			//@$_SESSION['will_pickup_order'] = false;
+			if(@$_SESSION['will_pickup_order'] == 'false') {
 				$checkbox_disabled_text = 'disabled';
 			}
 		}
@@ -665,7 +665,7 @@ function update_cart_func() {
 		}
 	}
 
-	if($_SESSION['will_pickup_order'] == 'true') {
+	if(@$_SESSION['will_pickup_order'] == 'true') {
 		$no_max_products = 1;
 	}
 
@@ -685,7 +685,7 @@ function update_cart_func() {
 
 	//pickup plants in order logic
 	if($pick_up_only_obj->pickup_season_is_active()) {
-		if($_SESSION['will_pickup_order'] == 'true') {
+		if(@$_SESSION['will_pickup_order'] == 'true') {
 			if($total_quantity_in_cart < $pick_up_only_obj->pick_up_only_number && !$no_pickup_min_products) {
 				remove_action( 'woocommerce_proceed_to_checkout', 'woocommerce_button_proceed_to_checkout', 20 );
 				wc_add_notice($pick_up_only_obj->get_pick_up_only_min_cart_error(), 'error');
@@ -693,7 +693,7 @@ function update_cart_func() {
 		}
 
 		//if pickup-only product is in cart, and pickup isn't selected...  AND pickup season is set to active!
-		if($pick_up_only_obj->is_pickup_only_product_in_cart() && $_SESSION['will_pickup_order'] !== 'true') {
+		if($pick_up_only_obj->is_pickup_only_product_in_cart() && @$_SESSION['will_pickup_order'] !== 'true') {
 			remove_action( 'woocommerce_proceed_to_checkout', 'woocommerce_button_proceed_to_checkout', 20 );
 			wc_add_notice($pick_up_only_obj->get_pick_up_only_cart_error(), 'error');
 		}
@@ -741,7 +741,7 @@ function get_number_of_cart_items() {
 function onp_set_woocommerce_shipping_var() {
 	//function to return the correct shipping method based on cart contents and whether pickup is selected or not.
 	if(isset($_POST['checkbox_status'])) {
-		$_SESSION['will_pickup_order'] = $_POST['checkbox_status'];
+		@$_SESSION['will_pickup_order'] = $_POST['checkbox_status'];
 	}
 
 	//default case
