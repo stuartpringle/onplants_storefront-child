@@ -54,6 +54,11 @@
 
 
     jQuery(document).ready(function() {
+        if(jQuery('.woocommerce-MyAccount-navigation-link--edit-address a').html() == '') {
+            jQuery('.woocommerce-MyAccount-navigation-link--edit-address a').html('Addresses');
+        }
+        jQuery('.woocommerce-MyAccount-navigation-link--edit-address a').html('Addresses');
+
         const ajaxurl = "<?php echo admin_url('admin-ajax.php'); ?>";
         jQuery(document.body).on( 'updated_cart_totals', function() {
             update_cart_item_count_with_ajax_call();
