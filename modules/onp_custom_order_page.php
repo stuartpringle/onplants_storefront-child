@@ -273,10 +273,10 @@ function get_current_filters() {
 function get_orders_from_db($start_from = 0, $results_per_page = 50, $filters = array()) {
 	global $wpdb;
 
-	$wc_order_id = ((int)$filters['wc_order_id'] > 0 ? $filters['wc_order_id'] : null);
-	if($filters['order_id'] > 0) {
+	$wc_order_id = ((int)@$filters['wc_order_id'] > 0 ? @$filters['wc_order_id'] : null);
+	if(@$filters['order_id'] > 0) {
 		$start_from = 0;
-		$wc_order_id = get_wc_order_id_by_new_order_id($filters['order_id'], $filters);
+		$wc_order_id = get_wc_order_id_by_new_order_id(@$filters['order_id'], $filters);
 	}
 
 	$query = "SELECT
