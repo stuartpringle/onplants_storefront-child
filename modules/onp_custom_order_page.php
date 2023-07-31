@@ -7,7 +7,7 @@ add_action('pre_get_posts', function ($query){
 
     if (!is_admin() && $query->is_main_query()) {
         if ($wp->request == 'show_packing_slip'){
-        	display_packing_slip($_GET['id']);
+        	display_packing_slip(@$_GET['id']);
             exit;
         } elseif($wp->request == 'add_onp_db') {
         	echo onp_install();
@@ -123,7 +123,7 @@ function display_orders() {
 			<input type="hidden" name="page" value="<?php echo @$_GET['page']; ?>">
 		</form>
 
-		<?php echo get_pagination($count_results[0][0], $results_per_page, $_GET['pn'], $filters); ?>
+		<?php echo get_pagination($count_results[0][0], $results_per_page, @$_GET['pn'], $filters); ?>
 		<table class="wp-list-table widefat fixed striped table-view-list posts">
 			<thead>
 				<tr>
@@ -176,7 +176,7 @@ function display_orders() {
 			} ?>
 		</table>
 	</div>
-	<?php echo get_pagination($count_results[0][0], $results_per_page, $_GET['pn'], $filters); ?>
+	<?php echo get_pagination($count_results[0][0], $results_per_page, @$_GET['pn'], $filters); ?>
 
 	<script type="text/javascript" >
 		function update_onp_order_status($id, $new_status) {
