@@ -51,7 +51,6 @@ add_filter( 'storefront_credit_link', '__return_false' );
 /************* Testing page **************/
 add_action('pre_get_posts', function ($query){
     global $wp;
-    onp_start_session();
 
     if(!is_admin() && $query->is_main_query()) {
     	//disabled
@@ -489,8 +488,6 @@ function on_cart_update_list_num_products() {
 
 add_filter('woocommerce_shipping_packages', 'onp_update_woocommerce_shipping_options');
 function onp_update_woocommerce_shipping_options($packages) {
-	onp_start_session();
-
 	//get the correct shipping package, then unset all the rest
 	$desired_shipping_method = onp_set_woocommerce_shipping_var();
 	//admin_dump_file($desired_shipping_method);
@@ -743,9 +740,8 @@ function get_number_of_cart_items() {
 
 function onp_set_woocommerce_shipping_var() {
 	//function to return the correct shipping method based on cart contents and whether pickup is selected or not.
-	onp_start_session();
 	if(isset($_POST['checkbox_status'])) {
-		@$_SESSION['will_pickup_order'] = $_POST['checkbox_status'];
+		$_SESSION['will_pickup_order'] = $_POST['checkbox_status'];
 	}
 
 	//default case
@@ -1215,15 +1211,10 @@ function resend_emails() {
     return;
 }
 
+add_action( 'init', 'onp_start_session' );
 function onp_start_session() {
-	if (session_status() == PHP_SESSION_DISABLED) {
-		return;
-	} elseif(session_status() == PHP_SESSION_NONE) {
-		if ( !session_id() ) {
-		    session_start( [
-		        'read_and_close' => true,
-		    ] );
-		}
+	if ( !session_id() ) {
+	    session_start();
 	}
 }
 
@@ -1240,8 +1231,6 @@ class Hide_Out_of_Stock_Widget extends WP_Widget {
     }
 
     public function widget( $args, $instance ) {
-    	onp_start_session();
-
         ob_start();
         echo $args['before_widget'], wpautop( $instance['text'] );
         ?>
