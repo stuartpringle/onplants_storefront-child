@@ -482,12 +482,16 @@ function onp_cart_message() {
 	}
 }
 
-add_filter('woocommerce_product_is_in_stock', 'onp_woocommerce_product_is_in_stock' );
-function onp_woocommerce_product_is_in_stock( ) {
+add_filter('woocommerce_product_is_in_stock', 'onp_woocommerce_product_is_in_stock', 1, 2 );
+function onp_woocommerce_product_is_in_stock( $status, $product ) {
+	//global $product;
+	//admin_dump($product->get_name());
+
 	$hide_all_physical_products = get_option('hide_all_physical_products', false);
-	if($hide_all_physical_products) {
+	if(!in_array(161, $product->get_category_ids()) && $hide_all_physical_products) {
 		return false;
 	}
+	return $status;
 }
 
 function on_cart_update_list_num_products() {
