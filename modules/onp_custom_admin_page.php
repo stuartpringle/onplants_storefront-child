@@ -31,6 +31,7 @@ function onp_settings_callback() {
 	$pick_up_only_text = get_option('pick_up_only_text', 'I am ordering %n+ plants and would like to pick up my order!');
 	$pick_up_only_number = get_option('pick_up_only_number', 24);
 	$pick_up_products_obj = new pick_up_only_product();
+	$hide_all_physical_products = get_option('hide_all_physical_products', false);
 
 	$args = array(
 	    //'category' => array( 'hoodies' ),
@@ -246,6 +247,10 @@ function onp_settings_callback() {
 											</td>
 										</tr>
 									</table>
+									<p>&nbsp;</p>
+									<h2>Turn Off Store (hide physical product stock)</h2>
+									<label for="hide_all_physical_products">Hide Physical Product Stock</label>
+									<input type="checkbox" name="hide_all_physical_products" id="hide_all_physical_products" value="true" <?php echo ($hide_all_physical_products ? 'checked="checked"' : ''); ?>>
 								</td>
 								<td style="width: 45%; vertical-align: top; padding-left: 2%;">
 									<h2>Pick-up Only Products</h2>
@@ -487,6 +492,12 @@ function min_products_save() {
 		$pick_up_after_calendar_text = str_replace("\n", '--NEWLINE--', $_POST['pick_up_after_calendar_text']);
 		$pick_up_after_calendar_text = sanitize_text_field( $pick_up_after_calendar_text );
 		update_option('pick_up_after_calendar_text', $pick_up_after_calendar_text);
+
+		$hide_all_physical_products = false;
+		if(sanitize_text_field( $_POST['hide_all_physical_products'] )) {
+			$hide_all_physical_products = true;
+		}
+		update_option('hide_all_physical_products', $hide_all_physical_products);
 
 		$plant_pack_products = get_plant_pack_products();
 

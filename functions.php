@@ -482,6 +482,14 @@ function onp_cart_message() {
 	}
 }
 
+add_filter('woocommerce_product_is_in_stock', 'onp_woocommerce_product_is_in_stock' );
+function onp_woocommerce_product_is_in_stock( ) {
+	$hide_all_physical_products = get_option('hide_all_physical_products', false);
+	if($hide_all_physical_products) {
+		return false;
+	}
+}
+
 function on_cart_update_list_num_products() {
 	add_action('woocommerce_before_cart_totals', 'list_num_products', 10);
 }
