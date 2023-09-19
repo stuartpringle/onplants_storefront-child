@@ -205,8 +205,7 @@ function onp_pickup_thankyou_change_order_status( $order_id, $checkout = null ){
 
 add_action('woocommerce_before_thankyou','onp_before_thankyou');
 function onp_before_thankyou(){
-    onp_start_session();
-    unset($_SESSION['will_pickup_order']);
+    delete_transient('will_pickup_order');
 }
 
 

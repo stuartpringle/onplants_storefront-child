@@ -200,7 +200,7 @@ if(in_array(get_the_ID(), array(37))) {
                 checkout_page_pickup_only_clicked();
             });
             <?php
-            if(@$_SESSION['will_pickup_order'] === 'true') {
+            if(get_transient('will_pickup_order') === 'true') {
                 ?>
                 document.getElementById('pick_up').checked = true;
                 checkout_page_pickup_only_clicked(true);

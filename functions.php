@@ -62,10 +62,12 @@ add_action('pre_get_posts', function ($query){
     }
 
     if(isset($_POST['onp-out-of-stock-submitted']) && @$_POST['onp-out-of-stock-submitted'] == 1) {
-    	$_SESSION['hide-out-of-stock'] = (@$_POST['hide-out-of-stock'] == 1);
+    	set_transient('hide-out-of-stock', (@$_POST['hide-out-of-stock'] == 1), DAY_IN_SECONDS);
+    	//$_SESSION['hide-out-of-stock'] = (@$_POST['hide-out-of-stock'] == 1);
     }
 
-    if(isset($_SESSION['hide-out-of-stock']) && @$_SESSION['hide-out-of-stock'] == 1) {
+    //if(isset($_SESSION['hide-out-of-stock']) && @$_SESSION['hide-out-of-stock'] == 1) {
+    if(get_transient('hide-out-of-stock') == 1) {
 	    /* Remove OUT OF STOCK items via checkbox */
 	    if ( ! $query->is_main_query() || is_admin() ) {
 	        return;
@@ -408,9 +410,7 @@ function onp_cart_message() {
 	$will_pickup_order = false;
 
 	if($pick_up_only_obj->pickup_season_is_active()) {
-		if(isset($_SESSION['will_pickup_order'])) {
-			$will_pickup_order = @$_SESSION['will_pickup_order'];
-		}
+		$will_pickup_order = get_transient('will_pickup_order');
 
 		$checkbox_disabled_text = '';
 
@@ -418,7 +418,7 @@ function onp_cart_message() {
 			//turn off checkbox - this is disabled currently!
 			//$will_pickup_order = false;
 			//@$_SESSION['will_pickup_order'] = false;
-			if(@$_SESSION['will_pickup_order'] == 'false') {
+			if(get_transient('will_pickup_order') == 'false') {
 				$checkbox_disabled_text = 'disabled';
 			}
 		}
@@ -482,16 +482,17 @@ function onp_cart_message() {
 	}
 }
 
-add_filter('woocommerce_product_is_in_stock', 'onp_woocommerce_product_is_in_stock', 1, 2 );
+add_filter('woocommerce_product_is_in_stock', 'onp_woocommerce_product_is_in_stock', 10, 2 );
 function onp_woocommerce_product_is_in_stock( $status, $product ) {
-	//global $product;
-	//admin_dump($product->get_name());
-
+	$product_id = $product->is_type('variation') ? $product->get_parent_id() : $product->get_id();
 	$hide_all_physical_products = get_option('hide_all_physical_products', false);
-	if(!in_array(161, $product->get_category_ids()) && $hide_all_physical_products) {
+	if($hide_all_physical_products && is_object($product) && @$product_id > 0) {
+		if(in_array(161, $product->get_category_ids()) || $product_id == 11426) {
+			return 1;
+		}
+
 		return false;
 	}
-	return $status;
 }
 
 function on_cart_update_list_num_products() {
@@ -677,7 +678,7 @@ function update_cart_func() {
 		}
 	}
 
-	if(@$_SESSION['will_pickup_order'] == 'true') {
+	if(get_transient('will_pickup_order') == 'true') {
 		$no_max_products = 1;
 	}
 
@@ -697,7 +698,7 @@ function update_cart_func() {
 
 	//pickup plants in order logic
 	if($pick_up_only_obj->pickup_season_is_active()) {
-		if(@$_SESSION['will_pickup_order'] == 'true') {
+		if(get_transient('will_pickup_order') == 'true') {
 			if($total_quantity_in_cart < $pick_up_only_obj->pick_up_only_number && !$no_pickup_min_products) {
 				remove_action( 'woocommerce_proceed_to_checkout', 'woocommerce_button_proceed_to_checkout', 20 );
 				wc_add_notice($pick_up_only_obj->get_pick_up_only_min_cart_error(), 'error');
@@ -705,7 +706,7 @@ function update_cart_func() {
 		}
 
 		//if pickup-only product is in cart, and pickup isn't selected...  AND pickup season is set to active!
-		if($pick_up_only_obj->is_pickup_only_product_in_cart() && @$_SESSION['will_pickup_order'] !== 'true') {
+		if($pick_up_only_obj->is_pickup_only_product_in_cart() && get_transient('will_pickup_order') !== 'true') {
 			remove_action( 'woocommerce_proceed_to_checkout', 'woocommerce_button_proceed_to_checkout', 20 );
 			wc_add_notice($pick_up_only_obj->get_pick_up_only_cart_error(), 'error');
 		}
@@ -753,7 +754,7 @@ function get_number_of_cart_items() {
 function onp_set_woocommerce_shipping_var() {
 	//function to return the correct shipping method based on cart contents and whether pickup is selected or not.
 	if(isset($_POST['checkbox_status'])) {
-		@$_SESSION['will_pickup_order'] = $_POST['checkbox_status'];
+		set_transient('will_pickup_order', $_POST['checkbox_status'], DAY_IN_SECONDS);
 	}
 
 	//default case
@@ -764,7 +765,7 @@ function onp_set_woocommerce_shipping_var() {
 	}
 
 	//force local pickup
-	if(@$_SESSION['will_pickup_order'] == 'true') {
+	if(get_transient('will_pickup_order') == 'true') {
 		$shipping_method = 'local_pickup:4';
 	}
 
@@ -1223,12 +1224,14 @@ function resend_emails() {
     return;
 }
 
+/*
 add_action( 'init', 'onp_start_session' );
 function onp_start_session() {
 	if ( !session_id() ) {
 	    session_start();
 	}
 }
+*/
 
 add_action( 'widgets_init', 'hide_out_of_stock_widget' );
 function hide_out_of_stock_widget() {
@@ -1250,7 +1253,7 @@ class Hide_Out_of_Stock_Widget extends WP_Widget {
 			<div class="gamma widget-title" style="padding-bottom: 16px;">
 				<input type="hidden" name="onp-out-of-stock-submitted" value="1">
 				<input type="checkbox" id="hide-out-of-stock" name="hide-out-of-stock" value="1"
-				        <?php echo (@$_SESSION['hide-out-of-stock'] ? 'checked' : ''); ?> onclick="document.getElementById('hide-out-of-stock-form').submit();">
+				        <?php echo (get_transient('hide-out-of-stock') ? 'checked' : ''); ?> onclick="document.getElementById('hide-out-of-stock-form').submit();">
 				<label for="hide-out-of-stock" class="cat-item cat-item-125" style="font-size: 14px; color: #8ebd33;"><b>Hide out of stock products</b></label>
 			</div>
 		</form>
