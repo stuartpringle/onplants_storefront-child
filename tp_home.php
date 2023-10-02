@@ -27,12 +27,13 @@
         }
     }
     
-    $show_video = 1; // this is force overridden from above
+    $homepage_display = 'show_store_closed_image';
+    $show_video = 0; // this is force overridden from above
     $video_url = '803499409?h=a46bc4f23e';
     $show_testimonials = 0;
     $show_new_products_on_homepage = 0;
-    $show_gift_card_homepage = 1;
-    if($show_video) {
+
+    if($homepage_display == 'show_video' && $show_video) {
         ob_start();
         //echo do_shortcode('[evp_embed_video url="/wp-content/uploads/2022/02/ONP_LONG_VERSIONP_FEB-6.mp4" autoplay="true"]');
         ?>
@@ -40,7 +41,7 @@
         <?php
         echo ob_get_clean();
     } else {
-        if($show_gift_card_homepage) {
+        if($homepage_display == 'show_gift_card_homepage') {
             ob_start();
             ?>
             <a href="/product-category/summer-sale/"><img src="<?php echo get_stylesheet_directory_uri(); ?>/images/SALE BANNER_2022.png" title="Summer Sale" alt="Summer Sale" /></a>
@@ -52,6 +53,12 @@
                 <br /> */ ?>
                 <a href="/shop/" class="button1">Shop Plants</a>
             </div>
+            <?php
+            echo ob_get_clean();
+        } elseif($homepage_display == 'show_store_closed_image') {
+            ob_start();
+            ?>
+            <img src="<?php echo get_stylesheet_directory_uri(); ?>/images/website-banner-sept-2023.png" title="See you in spring!" alt="See you in spring!" />
             <?php
             echo ob_get_clean();
         } else {
