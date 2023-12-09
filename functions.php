@@ -158,6 +158,11 @@ function change_completed_email_heading( $heading, $order ) {
 	return $heading;
 }
 
+//HIDING THE PRICE!
+add_filter( 'woocommerce_get_price_html', function( $price ) {
+	if ( is_admin() ) return $price;
+	return '';
+} );
 
 //Clear / empty the cart after an order has been placed
 add_action( 'woocommerce_thankyou', 'order_received_empty_cart_action', 10, 1 );
