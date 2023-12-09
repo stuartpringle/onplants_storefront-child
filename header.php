@@ -44,7 +44,7 @@ $num_items_in_cart = $cart->get_cart_contents_count();
         <div id="top_menu">
         	<div class="search"><?php get_search_form(); ?></div>
             <a href="/cart/" class="cart1">Cart <span class="header-cart-count" id="header-cart-count"><?php echo ($num_items_in_cart ? $num_items_in_cart : ''); ?></span></a>
-            <a href="/wishlist/" class="user noback"><i class="yith-wcwl-icon fa fa-heart" style="color: #8ebd33;"></i>My Wishlist</a>
+            <!--<a href="/wishlist/" class="user noback"><i class="yith-wcwl-icon fa fa-heart" style="color: #8ebd33;"></i>My Wishlist</a>-->
             <a href="/my-account/" class="user">My Account</a>
         </div>
     </div>

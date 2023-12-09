@@ -67,5 +67,5 @@ get_header( 'shop' ); ?>
 <?php get_footer( 'shop' ); ?>
 
 <script type="text/javascript">
-	jQuery('.yith-wcwl-add-to-wishlist').insertBefore('.cwginstock-subscribe-form');
+	//jQuery('.yith-wcwl-add-to-wishlist').insertBefore('.cwginstock-subscribe-form');
 </script>
