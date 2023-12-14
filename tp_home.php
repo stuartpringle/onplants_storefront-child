@@ -91,7 +91,7 @@
 <section class="bkgd_ligray intro">
     <div class="wrapper">
         <div class="one_third_i">
-            <a href="/wp-content/uploads/2023/12/ONP-2024-Catalogue.pdf" target="_blank"><img id="butterfly" src="<?php the_field('intro_image', 11); ?>" alt="Online Retail Native Plants" /></a>
+            <a href="/wp-content/uploads/2023/12/ONP_2024-Catalogue.pdf" target="_blank"><img id="butterfly" src="<?php the_field('intro_image', 11); ?>" alt="Online Retail Native Plants" /></a>
         </div>
         <div class="two_third_i">
             <h4 class="subtitle"><?php the_field('intro_h2', 11); ?></h4>
