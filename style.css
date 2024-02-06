@@ -21,12 +21,6 @@ Dark Gray: 	#383434
 */
 
 
-/* DISABLE PRICE TEXT */
-.price {
-	display: none !important;
-}
-
-
 /* STORE NOTICE BANNER */
 /*808a41*/
 .woocommerce-demo-store .demo_store {
