@@ -32,7 +32,7 @@
 
 				do_action( 'storefront_page_before' );
 
-				get_template_part( 'content', 'page' );
+				//get_template_part( 'content', 'page' );
 
 				/**
 				 * Functions hooked in to storefront_page_after action
