@@ -49,7 +49,7 @@ $num_items_in_cart = $cart->get_cart_contents_count();
         </div>
     </div>
 </header>
-
+<h1>HELLO</h1>
 <div id="menu_bar">
 	<div class="wrapper">
 		<nav class=" main-navigation" role="navigation">
